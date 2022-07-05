@@ -5,23 +5,20 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  configure-infrastructure:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  configure_infrastructure: 
     docker:
       - image: python:3.7-alpine3.11
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - add ssh keys:
-              fingerprints: [18:51:8d:00:b9:71:4d:3b:05:e7:74:53:53:6a:df:c3]
+      - add_ssh_keys:
+          fingerprints: ["18:51:8d:00:b9:71:4d:3b:05:e7:74:53:53:6a:df:c3"] # You can get this ID in the section where you registered the SSH Key
       - run:
-          name: Install Ansible
+          name: Install dependencies
           command: |
-            apk add --update ansible
+            # install the dependencies needed for your playbook
+            apk add --update ansible 
       - run:
-          name: Run Playbook and Configure server
+          name: Configure server
           command: |
             ansible-playbook -i inventory main-remote.yml
 
