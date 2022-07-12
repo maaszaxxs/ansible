@@ -21,10 +21,10 @@ jobs:
 #          name: Configure server
 #          command: |
 #            ansible-playbook -i inventory main-remote.yml
-
+# Exercise: Smoke Testing
   smoke_test:
     docker:
-      - image: alpine:lates
+      - image: alpine:latest
     steps:
       - run: apk add --update curl
       - run:
