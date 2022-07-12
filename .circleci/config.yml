@@ -14,8 +14,8 @@ commands:
            # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
            when: on_fail
            command: |
-             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
-
+             #aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+             aws s3 ls
 jobs:
 #  configure_infrastructure: 
 #    docker:
@@ -50,8 +50,6 @@ jobs:
            # else
             #  return 1
            # fi
-       - add_ssh_keys:
-               fingerprints: ["18:51:8d:00:b9:71:4d:3b:05:e7:74:53:53:6a:df:c3"]
        - run:
            name: Test job
            # Fail the job intentionally to simulate an error.
