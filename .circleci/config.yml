@@ -5,26 +5,43 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  configure_infrastructure: 
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["18:51:8d:00:b9:71:4d:3b:05:e7:74:53:53:6a:df:c3"] # You can get this ID in the section where you registered the SSH Key
-      - run:
-          name: Install dependencies
-          command: |
-            # install the dependencies needed for your playbook
-            apk add --update ansible 
-      - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i inventory main-remote.yml
+#  configure_infrastructure: 
+#    docker:
+#      - image: python:3.7-alpine3.11
+#    steps:
+#      - checkout
+#      - add_ssh_keys:
+#          fingerprints: ["18:51:8d:00:b9:71:4d:3b:05:e7:74:53:53:6a:df:c3"] # You can get this ID in the section where you registered the SSH Key
+#      - run:
+#          name: Install dependencies
+#          command: |
+#            # install the dependencies needed for your playbook
+#            apk add --update ansible 
+#      - run:
+#          name: Configure server
+#          command: |
+#            ansible-playbook -i inventory main-remote.yml
 
+  smoke_test:
+    docker:
+      - image: alpine:lates
+    steps:
+      - run: apk add --update curl
+      - run:
+          name: smoke test
+          command: |
+            URL="https://blog.udacity.com/"
+            # Test if website exists
+            if curl -s --head ${URL}
+            then
+              return 0
+            else
+              return 1
+            fi
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   my-workflow:
     jobs:
-      - configure_infrastructure
+#      - configure_infrastructure
+      - smoke_test     
