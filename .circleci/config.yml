@@ -97,6 +97,7 @@ jobs:
             aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
             --no-paginate --output text > ~/textfile.txt
+      - run: cat ~/textfile.txt
       - persist_to_workspace:
           root: ~/
           paths: 
@@ -130,10 +131,14 @@ jobs:
           # Use $OldBucketID environment variable or mybucket644752792305 below.
           # Similarly, you can create and use $OldStackID environment variable in place of production-distro 
           command: |
+            aws cloudformation delete-stack --stack-name production-distro
+            aws cloudformation delete-stack --stack-name stack-create-bucket-${>
+            cat ~/textfile.txt
             export OldBucketID=$(cat ~/textfile.txt)
-            aws s3 rm s3://${OldBucketID} --recursive
-            aws cloudformation delete-stack --stack-name production-distro 
-            aws cloudformation delete-stack --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7}
+            cat ${OldBucketID}
+            aws s3 rm "s3://${OldBucketID}" --recursive
+             
+            
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
