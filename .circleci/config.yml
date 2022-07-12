@@ -50,6 +50,8 @@ jobs:
            # else
             #  return 1
            # fi
+       - add_ssh_keys:
+               fingerprints: ["18:51:8d:00:b9:71:4d:3b:05:e7:74:53:53:6a:df:c3"]
        - run:
            name: Test job
            # Fail the job intentionally to simulate an error.
